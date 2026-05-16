@@ -73,7 +73,7 @@ async def process_job(job_id, req):
 
 async def generate_script(topic, duration, language):
  async with aiohttp.ClientSession() as s:
-  r = await s.post(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}", json={"contents":[{"parts":[{"text":f"Write a {duration} minute documentary script about {topic} in {language}. Pure narration only."}]}]})
+  r = await s.post(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}", json={"contents":[{"parts":[{"text":f"Write a {duration} minute documentary script about {topic} in {language}. Pure narration only."}]}]})
   d = await r.json()
   return d["candidates"][0]["content"]["parts"][0]["text"]
 
