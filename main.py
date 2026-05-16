@@ -111,7 +111,6 @@ def render_video(clips, audio, output, duration):
  concat = output.replace(".mp4", "_concat.mp4")
  subprocess.run(["ffmpeg","-y","-f","concat","-safe","0","-i",list_file,"-t",str(duration*60),"-c","copy",concat], check=True, capture_output=True)
  subprocess.run(["ffmpeg","-y","-i",concat,"-i",audio,"-c:v","libx264","-c:a","aac","-shortest",output], check=True, capture_output=True)
-
 async def upload_video(path, job_id):
  async with aiohttp.ClientSession() as s:
   with open(path, "rb") as f:
