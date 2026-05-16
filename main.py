@@ -73,9 +73,9 @@ async def process_job(job_id, req):
 
 async def generate_script(topic, duration, language):
  async with aiohttp.ClientSession() as s:
-  r = await s.post(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={GEMINI_API_KEY}", json={"contents":[{"parts":[{"text":f"Write a {duration} minute documentary script about {topic} in {language}. Keep it educational and factual."}]}]})
+  r = await s.post("https://openrouter.ai/api/v1/chat/completions", headers={"Authorization": "Bearer sk-or-v1-free", "Content-Type": "application/json"}, json={"model": "mistralai/mistral-7b-instruct:free", "messages":[{"role":"user","content":f"Write a {duration} minute documentary script about {topic} in {language}. Pure narration only."}]})
   d = await r.json()
-  return d["candidates"][0]["content"]["parts"][0]["text"]
+  return d["choices"][0]["message"]["content"]
 
 async def fetch_footage(topic, duration, tmp_dir):
  clips = []
