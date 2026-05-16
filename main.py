@@ -14,6 +14,7 @@ PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 jobs = {}
 
 class VideoRequest(BaseModel):
@@ -73,8 +74,8 @@ async def process_job(job_id, req):
 
 async def generate_script(topic, duration, language):
  async with aiohttp.ClientSession() as s:
-  r = await s.post("https://openrouter.ai/api/v1/chat/completions", headers={"Authorization": "Bearer sk-or-v1-free", "Content-Type": "application/json"}, json={"model": "mistralai/mistral-7b-instruct:free", "messages":[{"role":"user","content":f"Write a {duration} minute documentary script about {topic} in {language}. Pure narration only."}]})
-  return d["choices"][0]["message"]["content"] if "choices" in d else d["candidates"][0]["content"]["parts"][0]["text"]
+  r = await s.post("https://openrouter.ai/api/v1/chat/completions", headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"}, json={"model": "mistralai/mistral-7b-instruct:free", "messages":[{"role":"user","content":f"Write a {duration} minute documentary script about {topic} in {language}. Pure narration only."}]})
+  d = await r.json()
   return d["choices"][0]["message"]["content"]
 
 async def fetch_footage(topic, duration, tmp_dir):
