@@ -76,7 +76,7 @@ async def generate_script(topic, duration, language):
  async with aiohttp.ClientSession() as s:
   r = await s.post("https://openrouter.ai/api/v1/chat/completions", headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"}, json={"model": "mistralai/mistral-7b-instruct:free", "messages":[{"role":"user","content":f"Write a {duration} minute documentary script about {topic} in {language}. Pure narration only."}]})
   d = await r.json()
-  return d["choices"][0]["message"]["content"]
+ return d["choices"][0]["message"]["content"] if "choices" in d else "Script generation failed"
 
 async def fetch_footage(topic, duration, tmp_dir):
  clips = []
